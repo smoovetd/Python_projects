@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 import sys
-import ast
 
 desired_module = sys.argv 
 print(desired_module)
