@@ -1,17 +1,17 @@
 import re
 
 g_user_messages = []
-g_question_words = ['How', 'Why', 'Can', 'May', 'Would',
+g_question_words = ('How', 'Why', 'Can', 'May', 'Would',
                     'When', 'Who', 'Which', 'Where',
-                    'Does', 'Did', 'Is','Are','What']
-g_question_ends = ['isn\'t it', 'aren\'t they', 'isn\'t he', 'isn\'t she', 'aren\'t we', 'aren\'t you']
+                    'Does', 'Did', 'Is','Are','What')
+g_question_ends = ('isn\'t it', 'aren\'t they', 'isn\'t he', 'isn\'t she', 'aren\'t we', 'aren\'t you')
 
 def get_user_input() ->str:
     result = input('Say something: ')
     return result
 
 def is_question(input_txt, is_verbose_mode=False):
-    first_word = input_txt.split(' ')[0]
+    first_word = input_txt.split(' ')[0].title()
     result = False
 
     if is_verbose_mode:
@@ -39,14 +39,7 @@ def process_input(input_txt:str, is_verbose_mode=False):
     #replace whitespaces with single space
     input_txt = re.sub(r'\s+', ' ', input_txt)
 
-    processed_input = ''
-    for word in input_txt.split(' '):
-        if is_verbose_mode: print('DEBUG word: ' + word)
-        if len(processed_input) == 0:
-            processed_input = word.title()
-        else:
-            processed_input =  processed_input + ' ' + word
-        if is_verbose_mode: print('DEBUG process_input in loop: ' + processed_input)
+    processed_input = input_txt.capitalize()
 
     if is_question(input_txt, is_verbose_mode):
         processed_input +='?'
@@ -73,4 +66,4 @@ def run_program(is_verbose_mode = False):
     print('Your output is: ')
     print(*g_user_messages, sep=' ')
 
-run_program(True)
+run_program()
