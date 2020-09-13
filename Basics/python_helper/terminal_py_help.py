@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 import sys
+import os
+import pandas
 
 if len(sys.argv) > 1:
     #print(sys.argv)
