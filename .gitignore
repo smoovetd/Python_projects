@@ -1,0 +1,5 @@
+#Ignore all files in Basic directory
+Basic/
+
+#Ignore files within helper directory
+helper/
