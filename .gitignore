@@ -1,5 +1,8 @@
 #Ignore all files in Basic directory
-Basic/
+Basics/
 
 #Ignore files within helper directory
 helper/
+
+#ignore test_git_ignore.txt
+test_git_ignore.txt
