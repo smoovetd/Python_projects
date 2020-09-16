@@ -41,7 +41,14 @@ def find_similar_word_old(word:str, keys_words:list) -> list:
     return similar_words
 
 def find_similar_word(word: str, key_words:list) -> str:
-    return get_close_matches(word, key_words)[0]
+    result = ''
+    matches_list = get_close_matches(word, key_words)
+    if len(matches_list) == 0:
+        result = None
+    else:
+        result = matches_list[0]
+
+    return result
 
 
 def find_word(word:str) -> str:
@@ -64,7 +71,7 @@ def find_word(word:str) -> str:
             else:
                 possible_matches = find_similar_word(word, file_content.keys())
                 word_description = 'Word: "' + word + '" is not found in dictionary! Please double check it.'
-                if len(possible_matches) != 0 and  input('Did you mean word: ' + possible_matches + '? Y for yes, any key for no: ') == 'Y':
+                if possible_matches != None and  input('Did you mean word: ' + possible_matches + '? Y for yes, any key for no: ') == 'Y':
                     word_description = file_content[possible_matches]
 
         return word_description
