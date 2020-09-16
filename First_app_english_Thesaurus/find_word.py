@@ -1,5 +1,6 @@
 import json
 import os
+from difflib import get_close_matches
 
 g_words_file = 'files/data.json'
 g_matching_criteria_perc = 75
@@ -26,7 +27,7 @@ def compare_words(first:str, second:str):
     return float(matching_points/len(first)) * 100
 
 
-def find_similar_word(word:str, keys_words:list) -> list:
+def find_similar_word_old(word:str, keys_words:list) -> list:
     word_lenght = len(word)
     similar_words = []
     similar_words_by_chars = []
@@ -38,6 +39,9 @@ def find_similar_word(word:str, keys_words:list) -> list:
             similar_words.append(new_word)
 
     return similar_words
+
+def find_similar_word(word: str, key_words:list) -> str:
+    return get_close_matches(word, key_words)[0]
 
 
 def find_word(word:str) -> str:
@@ -60,8 +64,8 @@ def find_word(word:str) -> str:
             else:
                 possible_matches = find_similar_word(word, file_content.keys())
                 word_description = 'Word: "' + word + '" is not found in dictionary! Please double check it.'
-                if len(possible_matches) != 0 and  input('Did you mean word: ' + possible_matches[0] + '? Y for yes, any key for no: ') == 'Y':
-                    word_description = file_content[possible_matches[0]]
+                if len(possible_matches) != 0 and  input('Did you mean word: ' + possible_matches + '? Y for yes, any key for no: ') == 'Y':
+                    word_description = file_content[possible_matches]
 
         return word_description
 
