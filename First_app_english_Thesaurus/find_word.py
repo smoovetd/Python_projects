@@ -51,12 +51,12 @@ def find_similar_word(word: str, key_words:list) -> str:
     return result
 
 
-def find_word(word:str) -> str:
-    '''find_word - takes argument word - and will be returned description from g_words_file content - default ..files/data.json '''
+def find_word(word:str) -> list:
+    '''find_word - takes argument word - and will list with description from g_words_file content - default ..files/data.json and returns list with explanations or error message'''
 
-    word_description = ''
+    word_description = []
     if os.path.exists(g_words_file) == False:
-        word_description = 'ERROR no such file: ' + g_words_file
+        word_description.append('ERROR no such file: ' + g_words_file)
     else:
         with open(g_words_file, 'r') as data_file:
             file_content = json.load(data_file)
@@ -70,10 +70,23 @@ def find_word(word:str) -> str:
                 word_description = file_content[word.upper()]
             else:
                 possible_matches = find_similar_word(word, file_content.keys())
-                word_description = 'Word: "' + word + '" is not found in dictionary! Please double check it.'
+
                 if possible_matches != None and  input('Did you mean word: ' + possible_matches + '? Y for yes, any key for no: ') == 'Y':
                     word_description = file_content[possible_matches]
-
+                else:
+                    word_description.append('Word: "' + word + '" is not found in dictionary! Please double check it.')
         return word_description
 
-print(find_word(input('Enter word: ')))
+def get_list_printable(input_list:list) -> str:
+    header_message= 'Search result:'
+    result = header_message
+    start_of_line = ' * '
+#    print(type(input_list))
+#    print(input_list)
+    for item in input_list:
+        result = result + '\n' + start_of_line + item
+
+    return result
+
+#print(find_word(input('Enter word: ')))
+print(get_list_printable(find_word(input('Enter word: '))))
