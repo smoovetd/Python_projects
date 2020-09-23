@@ -1,6 +1,8 @@
 import json
 import os
+import mysql.connector
 from difflib import get_close_matches
+
 
 g_words_file = 'files/data.json'
 g_matching_criteria_perc = 75
@@ -77,6 +79,48 @@ def find_word(word:str) -> list:
                     word_description.append('Word: "' + word + '" is not found in dictionary! Please double check it.')
         return word_description
 
+def find_word_db(word:str) -> list:
+    '''find_word - takes argument word - and will list with description from remote DB - from the Udemy course and returns list with explanations or error message'''
+
+    result = []
+
+    conn = mysql.connector.connect(
+        user        = 'ardit700_student',
+        password    = 'ardit700_student',
+        host        = '108.167.140.122',
+        database    = 'ardit700_pm1database'
+    )
+
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT Definition FROM Dictionary WHERE Expression = '%s' OR Expression = '%s' OR Expression = '%s'" % (word.lower(), word.title(), word.upper()))
+    res = cursor.fetchall()
+
+    if len(res) == 0:
+        cursor.execute('SELECT DISTINCT(Expression) FROM Dictionary')
+        all_keys = [key[0] for key in cursor.fetchall()]
+
+        matches = get_close_matches(word, all_keys)
+        if matches:
+            new_word = matches[0]
+        else:
+            new_word = None
+
+        if new_word and input('Did you mean word: %s? Press "Y" for Yes ' % (new_word))=='Y':
+            cursor.execute("SELECT Definition FROM Dictionary WHERE Expression = '%s'" % (new_word))
+            res = cursor.fetchall()
+        else:
+            res = [('Word "%s" was not found in the dictionary.' % (word),)]
+
+    for item in res:
+        result.append(item[0])
+
+    #print(result)
+    #print(type(result))
+
+    return result
+
+
 def get_list_printable(input_list:list) -> str:
     header_message= 'Search result:'
     result = header_message
@@ -88,5 +132,25 @@ def get_list_printable(input_list:list) -> str:
 
     return result
 
+def run_dictionary(use_db = True):
+    '''run_dictionary takes user input and searches for matching word in the dictionary. Can be used with DB or file depending on parameter use_db'''
+
+    is_end = False
+    print('To Exit type: "/end"')
+    while (not is_end):
+        my_word = input('Enter word: ' )
+        if my_word == '/end':
+            is_end = True
+            break
+        if use_db:
+            content = get_list_printable(find_word_db(my_word))
+        else:
+            content = get_list_printable(find_word(my_word))
+        print(content)
+
+    print('Goodbye')
+
 #print(find_word(input('Enter word: ')))
-print(get_list_printable(find_word(input('Enter word: '))))
+#print(get_list_printable(find_word(input('Enter word: '))))
+#find_word_db('test')
+run_dictionary()
