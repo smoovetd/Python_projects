@@ -99,6 +99,7 @@ for volcanoe in all_volcanoes:
                                          )
     fg.add_child(crnt_marker)
 
+
 style_function = lambda x: { 'fillColor': 'blue' if int(x['properties']['POP2005']) < 1000000
                             else ('gray' if int(x['properties']['POP2005']) >= 1000000 and int(x['properties']['POP2005']) < 5000000
                             else ('yellow' if int(x['properties']['POP2005']) >= 5000000 and int(x['properties']['POP2005']) < 10000000
@@ -111,8 +112,12 @@ style_function = lambda x: { 'fillColor': 'blue' if int(x['properties']['POP2005
 
 crnt_tooltip = folium.GeoJsonTooltip(fields = ['NAME','POP2005'], aliases = ['Country','Population'])
 
-fg.add_child(folium.GeoJson(data = open('files/world.json', 'r', encoding = 'utf-8-sig').read() ,style_function = style_function, tooltip = crnt_tooltip))
+fg_country = folium.FeatureGroup(name = 'Countries')
+fg_country.add_child(folium.GeoJson(data = open('files/world.json', 'r', encoding = 'utf-8-sig').read() ,style_function = style_function, tooltip = crnt_tooltip))
+
+crnt_map.add_child(fg_country)
 crnt_map.add_child(fg)
+crnt_map.add_child(folium.LayerControl())
 crnt_map.save(file_name)
 print('New map is saved: %s' % (file_name))
 
