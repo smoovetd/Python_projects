@@ -10,7 +10,7 @@ def home() -> str:
 
 @app.route('/about/')
 def about() -> str:
-    return 'Website content is here!'
+    return render_template('about.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
