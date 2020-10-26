@@ -39,14 +39,14 @@ l_autor = Label(main_win, text = 'Autor', height=1 , width = 15)
 l_autor.grid(row = 0, column = 2)
 autor_val = StringVar()
 e_autor = Entry(main_win, textvariable = autor_val)
-e_autor.grid(row = 0, column = 3)
+e_autor.grid(row = 0, column = 3, padx = 2)
 
 #ISDN:
 l_isdn = Label(main_win, text = 'ISDN', height=1 , width = 15)
 l_isdn.grid(row = 1, column = 2)
 isdn_val = StringVar()
 e_isdn = Entry(main_win, textvariable = isdn_val)
-e_isdn.grid(row = 1, column = 3)
+e_isdn.grid(row = 1, column = 3, padx = 2)
 
 #Buttons
 b_viewall = Button(main_win, text = 'View All', width = 12, command = select_all)
@@ -61,5 +61,8 @@ b_delete = Button(main_win, text = 'Delete Selected', width = 12, command = dele
 b_delete.grid(row = 6, column = 3)
 b_close = Button(main_win, text = 'Close', width = 12, command = close)
 b_close.grid(row = 7, column = 3)
+
+out_text = Text(main_win, bg = '#00F0A0', height = 15, width = 60)
+out_text.grid(row = 2, column = 0, columnspan = 3, rowspan = 6, pady = 10, padx = 2)
 
 main_win.mainloop()
