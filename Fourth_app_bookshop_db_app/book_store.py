@@ -17,6 +17,7 @@ def delete() -> None:
 
 def close() -> None:
     '''Closes the program'''
+    main_win.destroy()
 
 main_win = Tk(className = 'Book Store')
 
