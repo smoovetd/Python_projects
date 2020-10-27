@@ -1,13 +1,48 @@
 from tkinter import *
+import sqlite3
+
+db_file_name = 'data/book_store.dba'
+books_db_name = 'book_db'
+next_id = 1
+
+def get_next_id() -> int:
+    '''Returns the current value of global variable next_id and increment it by 1'''
+    crnt_id = next_id
+    next_id = next_id + 1
+    return crnt_id
+
+def init_db() -> None:
+    conn = sqlite3.connect(db_file_name)
+    cursor = conn.cursor()
+    cursor.execute('CREATE TABLE IF NOT EXISTS ' + books_db_name + ' (id INTEGER, title TEXT,  autor TEXT, year TEXT, isdn TEXT )')
+    conn.commit()
+    conn.close()
+
+
+def insert(id:int, name:str, year:str, autor:str, isdn:str) -> bool:
+    conn = sqlite3.connect(db_file_name)
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO ' + books_db_name + '(id, title ,author, year, isdn) VALUES (?,?,?,?,?)', (id, name, year, autor, isdn))
+    conn.commit()
+    conn.close()
+
 
 def select_all() -> None:
     '''Select all records from the database and add them to the text box'''
+    conn = sqlite3.connect(db_file_name)
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM ' + books_db_name)
+    result = cursor.fetchall()
+    conn.close()
+    print(result)
 
 def search() -> None:
     '''Searches DB based on non-empty Entries'''
 
+
 def add() -> None:
     '''Adds Entry in DB based on non-empty Entries'''
+
 
 def update() -> None:
     '''Updates Selected record in DB based on non-empty Entries'''
@@ -18,6 +53,8 @@ def delete() -> None:
 def close() -> None:
     '''Closes the program'''
     main_win.destroy()
+
+init_db()
 
 main_win = Tk(className = 'Book Store')
 
