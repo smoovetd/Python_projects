@@ -3,38 +3,56 @@ import sqlite3
 
 db_file_name = 'data/book_store.dba'
 books_db_name = 'book_db'
-next_id = 1
+select_all_records = '*'
+
 
 def get_next_id() -> int:
-    '''Returns the current value of global variable next_id and increment it by 1'''
-    crnt_id = next_id
-    next_id = next_id + 1
+    '''Returns the current value of global variable g_next_Id and increment it by 1'''
+    global g_next_Id
+    crnt_id = g_next_Id
+    g_next_Id = g_next_Id + 1
     return crnt_id
 
+def create_db() -> None:
+    conn = sqlite3.connect(db_file_name)
+    cursor = conn.cursor()
+    cursor.execute('CREATE TABLE IF NOT EXISTS ' + books_db_name + ' (id INTEGER, title TEXT,  author TEXT, year TEXT, isdn TEXT )')
+    conn.commit()
+    conn.close()
+
+
+def insert(id:int, title:str, year:str, autor:str, isdn:str) -> bool:
+    conn = sqlite3.connect(db_file_name)
+    cursor = conn.cursor()
+    cursor.execute('INSERT INTO ' + books_db_name + '(id, title ,author, year, isdn) VALUES (?,?,?,?,?)', (id, title, year, autor, isdn))
+    conn.commit()
+    conn.close()
+
+def select (query:str) -> list:
+    conn = sqlite3.connect(db_file_name)
+    cursor = conn.cursor()
+    cursor.execute('SELECT ' + query + ' FROM ' + books_db_name)
+    result = cursor.fetchall()
+    conn.close()
+    return result
+
 def init_db() -> None:
-    conn = sqlite3.connect(db_file_name)
-    cursor = conn.cursor()
-    cursor.execute('CREATE TABLE IF NOT EXISTS ' + books_db_name + ' (id INTEGER, title TEXT,  autor TEXT, year TEXT, isdn TEXT )')
-    conn.commit()
-    conn.close()
-
-
-def insert(id:int, name:str, year:str, autor:str, isdn:str) -> bool:
-    conn = sqlite3.connect(db_file_name)
-    cursor = conn.cursor()
-    cursor.execute('INSERT INTO ' + books_db_name + '(id, title ,author, year, isdn) VALUES (?,?,?,?,?)', (id, name, year, autor, isdn))
-    conn.commit()
-    conn.close()
-
+    global g_next_Id
+    create_db()
+    ids = select('id')
+    if len(ids) == 0:
+        g_next_Id = 1
+    else:
+        print(ids)
+        ids_int = [int(str_val[0]) for str_val in ids]
+        ids_int.sort()
+        g_next_Id = ids_int[-1] + 1
+    #print(next_id)
 
 def select_all() -> None:
     '''Select all records from the database and add them to the text box'''
-    conn = sqlite3.connect(db_file_name)
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM ' + books_db_name)
-    result = cursor.fetchall()
-    conn.close()
-    print(result)
+    res = select(select_all_records)
+    print(res)
 
 def search() -> None:
     '''Searches DB based on non-empty Entries'''
@@ -42,7 +60,11 @@ def search() -> None:
 
 def add() -> None:
     '''Adds Entry in DB based on non-empty Entries'''
-
+    # print('Title: ' + title_val.get())
+    # print('Autor: ' + autor_val.get())
+    # print('Year: ' + year_val.get())
+    # print('ISDN: ' + isdn_val.get())
+    insert(id = get_next_id(), title = title_val.get(), autor = autor_val.get(), year = year_val.get(), isdn = isdn_val.get())
 
 def update() -> None:
     '''Updates Selected record in DB based on non-empty Entries'''
