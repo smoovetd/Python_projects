@@ -52,6 +52,11 @@ def init_db() -> None:
 def select_all() -> None:
     '''Select all records from the database and add them to the text box'''
     res = select(select_all_records)
+    for record in res:
+        row = ''
+        for item in record:
+            row = row + str(item) + ' | '
+        out_text.insert(index = END, chars= row + '\n')
     print(res)
 
 def search() -> None:
@@ -64,6 +69,7 @@ def add() -> None:
     # print('Autor: ' + autor_val.get())
     # print('Year: ' + year_val.get())
     # print('ISDN: ' + isdn_val.get())
+    if title_val.get() == '':
     insert(id = get_next_id(), title = title_val.get(), autor = autor_val.get(), year = year_val.get(), isdn = isdn_val.get())
 
 def update() -> None:
@@ -124,5 +130,9 @@ b_close.grid(row = 7, column = 3)
 
 out_text = Text(main_win, bg = '#00F0A0', height = 15, width = 60)
 out_text.grid(row = 2, column = 0, columnspan = 3, rowspan = 6, pady = 10, padx = 2)
+heading = ' Id  |      Title     |     Autor     |    Year    |      ISDN        '
+out_text.insert(END, heading)
+out_text.tag_add('heading', '1.0', '1.end')
+out_text.tag_config('heading', font='arial 14 bold')
 
 main_win.mainloop()
