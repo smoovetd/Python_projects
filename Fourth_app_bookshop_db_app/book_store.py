@@ -1,10 +1,29 @@
 from tkinter import *
+import tkinter
+import tkinter.messagebox
 import sqlite3
 
 db_file_name = 'data/book_store.dba'
 books_db_name = 'book_db'
 select_all_records = '*'
 
+def validate_input() -> bool:
+    res = True
+    if title_val.get() == '':
+        tkinter.messagebox.showerror(title = 'Input error', message = 'Title should not be empty')
+        res = False
+    elif autor_val.get() == '':
+        tkinter.messagebox.showerror(title = 'Input error', message = 'Autor should not be empty')
+        res = False
+    elif year_val.get() == '':
+        tkinter.messagebox.showerror(title = 'Input error', message = 'Year should not be empty')
+        res = False
+    elif isdn_val.get() == '':
+        tkinter.messagebox.showerror(title = 'Input error', message = 'ISDN should not be empty')
+        res = False
+    else:
+        res = True
+    return res
 
 def get_next_id() -> int:
     '''Returns the current value of global variable g_next_Id and increment it by 1'''
@@ -69,8 +88,8 @@ def add() -> None:
     # print('Autor: ' + autor_val.get())
     # print('Year: ' + year_val.get())
     # print('ISDN: ' + isdn_val.get())
-    if title_val.get() == '':
-    insert(id = get_next_id(), title = title_val.get(), autor = autor_val.get(), year = year_val.get(), isdn = isdn_val.get())
+    if validate_input():
+        insert(id = get_next_id(), title = title_val.get(), autor = autor_val.get(), year = year_val.get(), isdn = isdn_val.get())
 
 def update() -> None:
     '''Updates Selected record in DB based on non-empty Entries'''
