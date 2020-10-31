@@ -12,14 +12,23 @@ def validate_input() -> bool:
     if title_val.get() == '':
         tkinter.messagebox.showerror(title = 'Input error', message = 'Title should not be empty')
         res = False
-    elif autor_val.get() == '':
-        tkinter.messagebox.showerror(title = 'Input error', message = 'Autor should not be empty')
+    elif author_val.get() == '':
+        tkinter.messagebox.showerror(title = 'Input error', message = 'author should not be empty')
         res = False
     elif year_val.get() == '':
         tkinter.messagebox.showerror(title = 'Input error', message = 'Year should not be empty')
         res = False
     elif isdn_val.get() == '':
         tkinter.messagebox.showerror(title = 'Input error', message = 'ISDN should not be empty')
+        res = False
+    else:
+        res = True
+    return res
+
+def validate_search():
+    res = True
+    if title_val.get() == '' and author_val.get() == '' and year_val.get() == '' and isdn_val.get() == '':
+        tkinter.messagebox.showerror(title = 'Input error', message = 'At least one field should not be empty')
         res = False
     else:
         res = True
@@ -40,17 +49,22 @@ def create_db() -> None:
     conn.close()
 
 
-def insert(id:int, title:str, year:str, autor:str, isdn:str) -> bool:
+def insert(id:int, title:str, author:str, year:str,  isdn:str) -> bool:
     conn = sqlite3.connect(db_file_name)
     cursor = conn.cursor()
-    cursor.execute('INSERT INTO ' + books_db_name + '(id, title ,author, year, isdn) VALUES (?,?,?,?,?)', (id, title, year, autor, isdn))
+    cursor.execute('INSERT INTO ' + books_db_name + '(id, title ,author, year, isdn) VALUES (?,?,?,?,?)', (id, title, author, year, isdn))
     conn.commit()
     conn.close()
 
-def select (query:str) -> list:
+def select (query:str, where_clause:str = None) -> list:
     conn = sqlite3.connect(db_file_name)
     cursor = conn.cursor()
-    cursor.execute('SELECT ' + query + ' FROM ' + books_db_name)
+    full_query = "SELECT " + query + " FROM " + books_db_name
+    if where_clause != None:
+        full_query = full_query + " WHERE " + where_clause
+        print(where_clause)
+    print(full_query)
+    cursor.execute(full_query)
     result = cursor.fetchall()
     conn.close()
     return result
@@ -68,28 +82,57 @@ def init_db() -> None:
         g_next_Id = ids_int[-1] + 1
     #print(next_id)
 
-def select_all() -> None:
-    '''Select all records from the database and add them to the text box'''
-    res = select(select_all_records)
-    for record in res:
+def populate(records:list) -> None:
+    out_text.delete('2.0', END)
+    for record in records:
         row = ''
         for item in record:
             row = row + str(item) + ' | '
         out_text.insert(index = END, chars= row + '\n')
-    print(res)
+
+def select_all() -> None:
+    '''Select all records from the database and add them to the text box'''
+    res = select(select_all_records)
+    populate(res)
 
 def search() -> None:
     '''Searches DB based on non-empty Entries'''
+    if validate_search():
+        query_parts = []
+        if title_val.get() != '':
+            query_parts.append("title like '%" + title_val.get()+ "%'")
+
+        if author_val.get() != '':
+            query_parts.append("author like '%" + author_val.get() + "%'")
+
+        if year_val.get() != '':
+            query_parts.append("year like '%" + year_val.get()+ "%'")
+
+        if isdn_val.get() != '':
+            query_parts.append("isdn like '%" + isdn_val.get() + "%'")
+
+        is_first = True
+        where_query = ''
+        print(query_parts)
+        for part in query_parts:
+            print('Part: ' + part)
+            if not is_first:
+                where_query = where_query + ' AND '
+            where_query = where_query + part
+            is_first = False
+
+        result = select (query = select_all_records, where_clause =  where_query)
+        populate(result)
 
 
 def add() -> None:
     '''Adds Entry in DB based on non-empty Entries'''
     # print('Title: ' + title_val.get())
-    # print('Autor: ' + autor_val.get())
+    # print('Author: ' + author_val.get())
     # print('Year: ' + year_val.get())
     # print('ISDN: ' + isdn_val.get())
     if validate_input():
-        insert(id = get_next_id(), title = title_val.get(), autor = autor_val.get(), year = year_val.get(), isdn = isdn_val.get())
+        insert(id = get_next_id(), title = title_val.get(), author = author_val.get(), year = year_val.get(), isdn = isdn_val.get())
 
 def update() -> None:
     '''Updates Selected record in DB based on non-empty Entries'''
@@ -119,12 +162,12 @@ year_val = StringVar()
 e_year = Entry(main_win, textvariable = year_val)
 e_year.grid(row = 1, column = 1)
 
-#Autor:
-l_autor = Label(main_win, text = 'Autor', height=1 , width = 15)
-l_autor.grid(row = 0, column = 2)
-autor_val = StringVar()
-e_autor = Entry(main_win, textvariable = autor_val)
-e_autor.grid(row = 0, column = 3, padx = 2)
+#author:
+l_author = Label(main_win, text = 'Author', height=1 , width = 15)
+l_author.grid(row = 0, column = 2)
+author_val = StringVar()
+e_author = Entry(main_win, textvariable = author_val)
+e_author.grid(row = 0, column = 3, padx = 2)
 
 #ISDN:
 l_isdn = Label(main_win, text = 'ISDN', height=1 , width = 15)
@@ -149,7 +192,7 @@ b_close.grid(row = 7, column = 3)
 
 out_text = Text(main_win, bg = '#00F0A0', height = 15, width = 60)
 out_text.grid(row = 2, column = 0, columnspan = 3, rowspan = 6, pady = 10, padx = 2)
-heading = ' Id  |      Title     |     Autor     |    Year    |      ISDN        '
+heading = ' Id  |      Title     |     Author     |    Year    |      ISDN        '
 out_text.insert(END, heading)
 out_text.tag_add('heading', '1.0', '1.end')
 out_text.tag_config('heading', font='arial 14 bold')
