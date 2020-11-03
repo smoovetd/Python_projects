@@ -1,6 +1,8 @@
 from tkinter import *
 import tkinter
 import tkinter.messagebox
+import tkinter.ttk
+from tkinter.ttk import Treeview
 import sqlite3
 
 db_file_name = 'data/book_store.dba'
@@ -89,6 +91,7 @@ def populate(records:list) -> None:
         for item in record:
             row = row + str(item) + ' | '
         out_text.insert(index = END, chars= row + '\n')
+        out_lb.insert(END, row)
 
 def select_all() -> None:
     '''Select all records from the database and add them to the text box'''
@@ -190,11 +193,19 @@ b_delete.grid(row = 6, column = 3)
 b_close = Button(main_win, text = 'Close', width = 12, command = close)
 b_close.grid(row = 7, column = 3)
 
-out_text = Text(main_win, bg = '#00F0A0', height = 15, width = 60)
-out_text.grid(row = 2, column = 0, columnspan = 3, rowspan = 6, pady = 10, padx = 2)
-heading = ' Id  |      Title     |     Author     |    Year    |      ISDN        '
-out_text.insert(END, heading)
-out_text.tag_add('heading', '1.0', '1.end')
-out_text.tag_config('heading', font='arial 14 bold')
+# out_text = Text(main_win, bg = '#00F0A0', height = 15, width = 60)
+# out_text.grid(row = 2, column = 0, columnspan = 3, rowspan = 6, pady = 10, padx = 2)
+# heading = ' Id  |      Title     |     Author     |    Year    |      ISDN        '
+# out_text.insert(END, heading)
+# out_text.tag_add('heading', '1.0', '1.end')
+# out_text.tag_config('heading', font='arial 14 bold')
+#
+# out_lb = Listbox(main_win,height = 15, width = 60)
+# out_lb.grid(row = 9, column = 0, columnspan = 3, rowspan = 6, pady = 10, padx = 2)
 
+headings = ['Id', 'Title', 'Author', 'Year', 'isdn']
+tree =  Treeview(main_win, columns = headings, show='headings')
+tree.grid(row = 2, column = 0, columnspan = 3, rowspan = 6)
+for item in headings:
+    tree.heading(item, text = item)
 main_win.mainloop()
