@@ -85,13 +85,14 @@ def init_db() -> None:
     #print(next_id)
 
 def populate(records:list) -> None:
-    out_text.delete('2.0', END)
+    #out_text.delete('2.0', END)
     for record in records:
-        row = ''
-        for item in record:
-            row = row + str(item) + ' | '
-        out_text.insert(index = END, chars= row + '\n')
-        out_lb.insert(END, row)
+        # row = ''
+        # for item in record:
+        #     row = row + str(item) + ' | '
+        #  out_text.insert(index = END, chars= row + '\n')
+        # out_lb.insert(END, row)
+        tree.insert('', 'end', values=record)
 
 def select_all() -> None:
     '''Select all records from the database and add them to the text box'''
