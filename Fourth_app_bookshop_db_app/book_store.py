@@ -208,4 +208,16 @@ tree =  Treeview(main_win, columns = headings, show='headings')
 tree.grid(row = 2, column = 0, columnspan = 3, rowspan = 6)
 for item in headings:
     tree.heading(item, text = item)
+for col in headings:
+    desired_width = 0
+    if col == 'Id':
+        desired_width = 30
+    elif col == 'Title':
+        desired_width = 200
+    elif col == 'Author':
+        desired_width = 170
+    else:
+        desired_width = 80
+    tree.column(col, width = desired_width)
+#main_win.update()
 main_win.mainloop()
