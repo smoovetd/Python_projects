@@ -85,7 +85,12 @@ def init_db() -> None:
     #print(next_id)
 
 def populate(records:list) -> None:
+    '''Deletes content of the treeview and populate with records list'''
     #out_text.delete('2.0', END)
+    for item in tree.get_children():
+#        print(item)
+        tree.delete(item)
+
     for record in records:
         # row = ''
         # for item in record:
