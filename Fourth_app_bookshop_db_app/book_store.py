@@ -225,5 +225,8 @@ for col in headings:
     else:
         desired_width = 80
     tree.column(col, width = desired_width)
+
+vertscrollbar = tkinter.ttk.Scrollbar(main_win, orient = 'vertical', command = tree.yview)
+vertscrollbar.place(x = 560, y = 58, height = 205)
 #main_win.update()
 main_win.mainloop()
