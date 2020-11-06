@@ -9,6 +9,8 @@ db_file_name = 'data/book_store.dba'
 books_db_name = 'book_db'
 select_all_records = '*'
 
+crnt_text_vals = []
+
 def validate_input() -> bool:
     res = True
     if title_val.get() == '':
@@ -85,13 +87,16 @@ def init_db() -> None:
     #print(next_id)
 
 def get_selected_item(event) -> None:
+    global crnt_text_vals
     current_item = tree.focus()
     curnt_record = tree.item(current_item)['values']
     #print(curnt_record)
     title_val.set(curnt_record[1])
     author_val.set(curnt_record[2])
     year_val.set(curnt_record[3])
-    isdn_val.set(curnt_record[3])
+    isdn_val.set(curnt_record[4])
+    crnt_text_vals = curnt_record
+    print(crnt_text_vals)
 
 def populate(records:list) -> None:
     '''Deletes content of the treeview and populate with records list'''
@@ -154,7 +159,21 @@ def add() -> None:
 
 def update() -> None:
     '''Updates Selected record in DB based on non-empty Entries'''
-    get_selected_item()
+    global crnt_text_vals
+    # print(crnt_text_vals)
+    # print(crnt_text_vals[0])
+    if validate_input():
+        conn = sqlite3.connect(db_file_name)
+        cursor = conn.cursor()
+        cursor.execute(" UPDATE " + books_db_name +
+                       " SET title = '" + title_val.get() + "'," +
+                       " author = '" + author_val.get() + "'," +
+                       " year = '" + year_val.get() + "'," +
+                       " isdn = '" + isdn_val.get() +
+                       "' WHERE id = '" + str(crnt_text_vals[0]) + "';")
+        conn.commit()
+        conn.close()
+
 
 def delete() -> None:
     '''Deletes Selected record in DB based on non-empty Entries'''
