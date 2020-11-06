@@ -84,6 +84,15 @@ def init_db() -> None:
         g_next_Id = ids_int[-1] + 1
     #print(next_id)
 
+def get_selected_item(event) -> None:
+    current_item = tree.focus()
+    curnt_record = tree.item(current_item)['values']
+    #print(curnt_record)
+    title_val.set(curnt_record[1])
+    author_val.set(curnt_record[2])
+    year_val.set(curnt_record[3])
+    isdn_val.set(curnt_record[3])
+
 def populate(records:list) -> None:
     '''Deletes content of the treeview and populate with records list'''
     #out_text.delete('2.0', END)
@@ -145,6 +154,7 @@ def add() -> None:
 
 def update() -> None:
     '''Updates Selected record in DB based on non-empty Entries'''
+    get_selected_item()
 
 def delete() -> None:
     '''Deletes Selected record in DB based on non-empty Entries'''
@@ -228,5 +238,6 @@ for col in headings:
 
 vertscrollbar = tkinter.ttk.Scrollbar(main_win, orient = 'vertical', command = tree.yview)
 vertscrollbar.place(x = 560, y = 58, height = 205)
+tree.bind('<ButtonRelease-1>', get_selected_item)
 #main_win.update()
 main_win.mainloop()
