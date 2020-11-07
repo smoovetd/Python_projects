@@ -9,7 +9,10 @@ db_file_name = 'data/book_store.dba'
 books_db_name = 'book_db'
 select_all_records = '*'
 
+#global variables:
 crnt_text_vals = []
+# set is_verbose to True for debug
+is_verbose = False
 
 def validate_input() -> bool:
     res = True
@@ -41,8 +44,10 @@ def validate_search():
 def get_next_id() -> int:
     '''Returns the current value of global variable g_next_Id and increment it by 1'''
     global g_next_Id
+    global is_verbose
     crnt_id = g_next_Id
     g_next_Id = g_next_Id + 1
+    if is_verbose: print ('Current id: ' + str(crnt_id) + ', Next id: ' + str(g_next_Id))
     return crnt_id
 
 def create_db() -> None:
@@ -61,13 +66,14 @@ def insert(id:int, title:str, author:str, year:str,  isdn:str) -> bool:
     conn.close()
 
 def select (query:str, where_clause:str = None) -> list:
+    global is_verbose
     conn = sqlite3.connect(db_file_name)
     cursor = conn.cursor()
     full_query = "SELECT " + query + " FROM " + books_db_name
     if where_clause != None:
         full_query = full_query + " WHERE " + where_clause
-        print(where_clause)
-    print(full_query)
+        if is_verbose: print(where_clause)
+    if is_verbose: print(full_query)
     cursor.execute(full_query)
     result = cursor.fetchall()
     conn.close()
@@ -75,12 +81,13 @@ def select (query:str, where_clause:str = None) -> list:
 
 def init_db() -> None:
     global g_next_Id
+    global is_verbose
     create_db()
     ids = select('id')
     if len(ids) == 0:
         g_next_Id = 1
     else:
-        print(ids)
+        if is_verbose: print(ids)
         ids_int = [int(str_val[0]) for str_val in ids]
         ids_int.sort()
         g_next_Id = ids_int[-1] + 1
@@ -88,6 +95,7 @@ def init_db() -> None:
 
 def get_selected_item(event) -> None:
     global crnt_text_vals
+    global is_verbose
     current_item = tree.focus()
     curnt_record = tree.item(current_item)['values']
     #print(curnt_record)
@@ -96,7 +104,7 @@ def get_selected_item(event) -> None:
     year_val.set(curnt_record[3])
     isdn_val.set(curnt_record[4])
     crnt_text_vals = curnt_record
-    print(crnt_text_vals)
+    if is_verbose: print(crnt_text_vals)
 
 def populate(records:list) -> None:
     '''Deletes content of the treeview and populate with records list'''
@@ -120,6 +128,7 @@ def select_all() -> None:
 
 def search() -> None:
     '''Searches DB based on non-empty Entries'''
+    global is_verbose
     if validate_search():
         query_parts = []
         if title_val.get() != '':
@@ -136,9 +145,9 @@ def search() -> None:
 
         is_first = True
         where_query = ''
-        print(query_parts)
+        if is_verbose: print(query_parts)
         for part in query_parts:
-            print('Part: ' + part)
+            if is_verbose: print('Part: ' + part)
             if not is_first:
                 where_query = where_query + ' AND '
             where_query = where_query + part
@@ -177,6 +186,14 @@ def update() -> None:
 
 def delete() -> None:
     '''Deletes Selected record in DB based on non-empty Entries'''
+    global crnt_text_vals
+    if validate_input():
+        conn = sqlite3.connect(db_file_name)
+        cursor = conn.cursor()
+        cursor.execute(" DELETE FROM " + books_db_name +
+                       " WHERE id=" + str(crnt_text_vals[0]) + ";")
+        conn.commit()
+        conn.close()
 
 def close() -> None:
     '''Closes the program'''
