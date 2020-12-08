@@ -97,13 +97,15 @@ def get_selected_item(event) -> None:
     global crnt_text_vals
     global is_verbose
     current_item = tree.focus()
-    curnt_record = tree.item(current_item)['values']
-    #print(curnt_record)
-    title_val.set(curnt_record[1])
-    author_val.set(curnt_record[2])
-    year_val.set(curnt_record[3])
-    isdn_val.set(curnt_record[4])
-    crnt_text_vals = curnt_record
+    if (current_item != ''):
+        curnt_record = tree.item(current_item)['values']
+        #print(curnt_record)
+        title_val.set(curnt_record[1])
+        author_val.set(curnt_record[2])
+        year_val.set(curnt_record[3])
+        isdn_val.set(curnt_record[4])
+        crnt_text_vals = curnt_record
+
     if is_verbose: print(crnt_text_vals)
 
 def populate(records:list) -> None:
