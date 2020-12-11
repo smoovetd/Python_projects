@@ -6,3 +6,9 @@ helper/
 
 #ignore test_git_ignore.txt
 test_git_ignore.txt
+
+#ignore additional folders created with pyinstaller
+Fourth_app_bookshop_db_app/build/
+Fourth_app_bookshop_db_app/dist/
+Fourth_app_bookshop_db_app/__pycache__/
+*.spec
