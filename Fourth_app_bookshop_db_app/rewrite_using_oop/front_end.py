@@ -1,7 +1,7 @@
 from tkinter import *
 from backend import DBInterraction
 
-db = DBInterraction()
+db = DBInterraction("../data/book_store_oop.dba")
 
 def get_selected_row(event):
     global selected_tuple
