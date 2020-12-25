@@ -1,0 +1,40 @@
+<LoginScreen>:
+    GridLayout:
+        cols: 1
+        GridLayout:
+            cols: 1
+            Label:
+                text: 'User login'
+            TextInput:
+                hint_text: 'User Name'
+            TextInput:
+                hint_text: 'Password'
+            Button:
+                text: 'Login'
+        GridLayout:
+            cols: 2
+            Button:
+                text: 'Forgot Password'
+            Button:
+                text: 'Sign up'
+                on_press: root.sign_up()
+
+<SignUpScreen>
+    GridLayout:
+        cols: 1
+        Label:
+            text: 'Sign up for a space journey'
+        TextInput
+            hint_text: 'Enter username'
+            id: username
+        TextInput
+            hint_text: 'Enter password'
+            id: password
+        Button:
+            text: 'Submit'
+            on_press: root.add_user(root.ids.username.text, root.ids.password.text)
+<RootWidget>
+    LoginScreen:
+        name: 'login_screen'
+    SignUpScreen:
+        name: 'sign_up_screen'
