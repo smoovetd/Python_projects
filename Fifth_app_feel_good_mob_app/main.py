@@ -36,7 +36,8 @@ class SignUpScreen(Screen):
         self.manager.current = 'sign_up_screen_success'
 
 class SignUpScreenSuccess(Screen):
-    pass
+    def go_to_login(self):
+        self.manager.current = 'login_screen'
 
 class RootWidget(ScreenManager):
     pass
