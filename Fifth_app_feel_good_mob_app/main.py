@@ -16,6 +16,26 @@ class LoginScreen(Screen):
     def sign_up(self):
         self.manager.current = 'sign_up_screen'
 
+    def login(self, username, password):
+        users = dict()
+        if is_file_empty('users.json') == True:
+            with open ('users.json') as file:
+                users = json.load(file)
+
+        if username in users.keys()and users[username]['username'] == username and users[username]['password'] == password:
+            self.manager.current = 'login_screen_success'
+        else:
+            print('Error: incorrect username/password')
+
+class LoginScreenSuccess(Screen):
+    def logout(self):
+        self.manager.current = 'login_screen'
+
+    def enlight(self, mood):
+        print('Mood is: ', mood)
+        pass
+
+
 class SignUpScreen(Screen):
     def add_user(self, username, password):
         users = dict()
