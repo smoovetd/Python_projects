@@ -4,6 +4,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 import json
 from datetime import datetime
 import os
+import random
 
 Builder.load_file('design.kv')
 
@@ -25,15 +26,32 @@ class LoginScreen(Screen):
         if username in users.keys()and users[username]['username'] == username and users[username]['password'] == password:
             self.manager.current = 'login_screen_success'
         else:
-            print('Error: incorrect username/password')
+            self.ids.login_wrong.text = 'Error: incorrect username/password'
 
 class LoginScreenSuccess(Screen):
     def logout(self):
         self.manager.current = 'login_screen'
 
     def enlight(self, mood):
-        print('Mood is: ', mood)
-        pass
+        file_path = ''
+        if mood == 'happy':
+            file_path = 'quotes/happy.txt'
+        elif mood == 'sad':
+            file_path = 'quotes/happy.txt'
+        elif mood == 'unloved':
+            file_path = 'quotes/unloved.txt'
+        else:
+            file_path = ''
+
+        output_content = ''
+        if file_path != '':
+            with open(file_path, 'r') as file:
+                all_quotes = file.readlines()
+                output_content = all_quotes[random.randrange(0, len(all_quotes), 1)]
+        else:
+            output_content = 'Unsupported mood: ' + mood
+
+        self.ids.output.text = output_content
 
 
 class SignUpScreen(Screen):

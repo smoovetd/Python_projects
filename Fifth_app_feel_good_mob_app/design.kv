@@ -22,6 +22,10 @@
             Button:
                 text: 'Sign up'
                 on_press: root.sign_up()
+            Label:
+                id: login_wrong
+                text: ''
+
 
 <SignUpScreen>
     GridLayout:
@@ -60,6 +64,9 @@
         Button:
             text: 'Enlight me'
             on_press: root.enlight(root.ids.mood.text)
+        Label:
+            text: ''
+            id: output
 
 <RootWidget>
     LoginScreen:
