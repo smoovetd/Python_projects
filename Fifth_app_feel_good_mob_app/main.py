@@ -5,6 +5,8 @@ import json
 from datetime import datetime
 import os
 import random
+import pathlib
+import glob
 
 Builder.load_file('design.kv')
 
@@ -34,20 +36,11 @@ class LoginScreenSuccess(Screen):
 
     def enlight(self, mood):
         file_path = ''
-        if mood == 'happy':
-            file_path = 'quotes/happy.txt'
-        elif mood == 'sad':
-            file_path = 'quotes/happy.txt'
-        elif mood == 'unloved':
-            file_path = 'quotes/unloved.txt'
-        else:
-            file_path = ''
-
-        output_content = ''
-        if file_path != '':
+        available_moods = [ pathlib.Path(item).stem for item in glob.glob('quotes/*.txt')]
+        if mood in available_moods:
+            file_path = f'quotes/{mood}.txt'
             with open(file_path, 'r') as file:
-                all_quotes = file.readlines()
-                output_content = all_quotes[random.randrange(0, len(all_quotes), 1)]
+                output_content = random.choice(file.readlines())
         else:
             output_content = 'Unsupported mood: ' + mood
 
