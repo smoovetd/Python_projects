@@ -7,6 +7,9 @@ import os
 import random
 import pathlib
 import glob
+from hoverable import HoverBehavior
+from kivy.uix.image import Image
+from kivy.uix.behaviors import ButtonBehavior
 
 Builder.load_file('design.kv')
 
@@ -69,6 +72,9 @@ class SignUpScreen(Screen):
 class SignUpScreenSuccess(Screen):
     def go_to_login(self):
         self.manager.current = 'login_screen'
+
+class ImageButton(ButtonBehavior, HoverBehavior, Image):
+    pass
 
 class RootWidget(ScreenManager):
     pass

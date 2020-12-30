@@ -3,25 +3,41 @@
         cols: 1
         GridLayout:
             cols: 1
+            padding: 15, 15
+            spacing: 20, 20
             Label:
                 text: 'User login'
+                font_size: '20sp'
             TextInput:
                 hint_text: 'User Name'
                 id: username
             TextInput:
                 hint_text: 'Password'
+                password: True
                 hidinput: 1
                 id: password
-            Button:
-                text: 'Login'
-                on_press: root.login(root.ids.username.text, root.ids.password.text)
+            RelativeLayout:
+                Button:
+                    text: 'Login'
+                    size_hint: 0.3, 0.5
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                    on_press: root.login(root.ids.username.text, root.ids.password.text)
         GridLayout:
             cols: 2
+            size_hint: 0.2, 0.2
+            padding: 10, 10
+            spacing: 10, 0
             Button:
                 text: 'Forgot Password'
+                background_color: 1,1,1,0
+                color: 0.1,0.7,1,1
+                opacity: 1 if self.state =='normal' else 0.5
             Button:
                 text: 'Sign up'
                 on_press: root.sign_up()
+                background_color: 1,1,1,0
+                color: 0.1,0.7,1,1
+                opacity: 1 if self.state =='normal' else 0.5
             Label:
                 id: login_wrong
                 text: ''
@@ -30,6 +46,8 @@
 <SignUpScreen>
     GridLayout:
         cols: 1
+        padding: 40, 40
+        spacing: 40, 40
         Label:
             text: 'Sign up for a space journey'
         TextInput
@@ -54,8 +72,14 @@
 <LoginScreenSuccess>
     GridLayout:
         cols: 1
-        Button:
-            on_press: root.logout()
+        padding: 20, 20
+        spacing: 20, 20
+        RelativeLayout:
+            ImageButton:
+                source: 'hover_pics/logout_hover.png' if self.hovered else 'hover_pics/logout_nothover.png'
+                on_press: root.logout()
+                size_hint: 0.35, 0.35
+                pos_hint: {'center_x': 0.93, 'center_y': 0.8}
         Label:
             text: 'How do you feel?'
         TextInput:
