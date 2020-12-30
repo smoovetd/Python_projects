@@ -88,9 +88,13 @@
         Button:
             text: 'Enlight me'
             on_press: root.enlight(root.ids.mood.text)
-        Label:
-            text: ''
-            id: output
+        ScrollView:
+            Label:
+                text: ''
+                id: output
+                text_size: self.width, None
+                size_hint_y: None
+                height: self.texture_size[1]
 
 <RootWidget>
     LoginScreen:
