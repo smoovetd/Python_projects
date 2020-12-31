@@ -13,7 +13,7 @@ from kivy.uix.behaviors import ButtonBehavior
 
 Builder.load_file('design.kv')
 
-def is_file_empty(path):
+def is_file_non_empty(path):
     is_empty = os.path.isfile(path) and os.path.getsize(path) > 0
     print(path, is_empty)
     return is_empty
@@ -24,7 +24,7 @@ class LoginScreen(Screen):
 
     def login(self, username, password):
         users = dict()
-        if is_file_empty('users.json') == True:
+        if is_file_non_empty('users.json') == True:
             with open ('users.json') as file:
                 users = json.load(file)
 
@@ -32,6 +32,9 @@ class LoginScreen(Screen):
             self.manager.current = 'login_screen_success'
         else:
             self.ids.login_wrong.text = 'Error: incorrect username/password'
+
+    def go_to_password_reset(self):
+        self.manager.current = 'password_reset'
 
 class LoginScreenSuccess(Screen):
     def logout(self):
@@ -53,7 +56,7 @@ class LoginScreenSuccess(Screen):
 class SignUpScreen(Screen):
     def add_user(self, username, password):
         users = dict()
-        if is_file_empty('users.json') == True:
+        if is_file_non_empty('users.json') == True:
             #print('SignUpScreen in here')
             with open('users.json', 'r') as file:
                 users = json.load(file)
@@ -70,6 +73,23 @@ class SignUpScreen(Screen):
         self.manager.current = 'sign_up_screen_success'
 
 class SignUpScreenSuccess(Screen):
+    def go_to_login(self):
+        self.manager.current = 'login_screen'
+
+class ForgotPasswordScreen(Screen):
+    def change_pass(self, uname, newpword):
+        if is_file_non_empty('users.json') == True:
+            with open ('users.json', 'r') as file:
+                users = json.load(file)
+
+            if uname in users.keys():
+                users[uname]['password'] = newpword
+                with open ('users.json', 'w') as file:
+                    json.dump(users, file)
+                self.ids.confirmation.text = 'Successfull password reset'
+        else:
+            self.ids.confirmation.text = 'Error: No such User.'
+
     def go_to_login(self):
         self.manager.current = 'login_screen'
 

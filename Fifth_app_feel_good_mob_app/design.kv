@@ -32,6 +32,7 @@
                 background_color: 1,1,1,0
                 color: 0.1,0.7,1,1
                 opacity: 1 if self.state =='normal' else 0.5
+                on_press: root.go_to_password_reset()
             Button:
                 text: 'Sign up'
                 on_press: root.sign_up()
@@ -42,6 +43,35 @@
                 id: login_wrong
                 text: ''
 
+<ForgotPasswordScreen>
+    GridLayout:
+        cols: 1
+        GridLayout:
+            cols:1
+            padding: 40, 40
+            spacing: 40, 40
+            Label:
+                text: 'Password reset'
+            TextInput:
+                hint_text: 'Enter username'
+                id: username
+            TextInput:
+                hint_text: 'Enter new password'
+                id: newpassword
+            Label:
+                id: confirmation
+                text: ''
+        GridLayout:
+            cols: 2
+            padding: 20, 20
+            spacing: 10, 10
+            size_hint: 0.2, 0.2
+            Button:
+                text: 'Back'
+                on_press: root.go_to_login()
+            Button:
+                text: 'Submit'
+                on_press: root.change_pass(root.ids.username.text, root.ids.newpassword.text)
 
 <SignUpScreen>
     GridLayout:
@@ -105,3 +135,5 @@
         name: 'sign_up_screen_success'
     LoginScreenSuccess
         name: 'login_screen_success'
+    ForgotPasswordScreen
+        name: 'password_reset'
