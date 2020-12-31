@@ -52,6 +52,15 @@ class LoginScreenSuccess(Screen):
 
         self.ids.output.text = output_content
 
+    def go_to_add_quote(self):
+        self.manager.current = 'add_quote'
+
+class AddNewQuoteScreen(Screen):
+    def go_to_login_success(self):
+        self.manager.current = 'login_screen_success'
+
+    def add_quote(self, mood, quote):
+        pass
 
 class SignUpScreen(Screen):
     def add_user(self, username, password):

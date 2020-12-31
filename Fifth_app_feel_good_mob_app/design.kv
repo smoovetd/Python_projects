@@ -125,6 +125,28 @@
                 text_size: self.width, None
                 size_hint_y: None
                 height: self.texture_size[1]
+        Button:
+            text: 'Add new Quote'
+            on_press:  root.go_to_add_quote()
+
+<AddNewQuoteScreen>
+    GridLayout:
+        cols: 1
+        padding: 20, 20
+        spacing: 20, 20
+        TextInput:
+            hint_text: 'Enter mood'
+            id: mood
+        TextInput:
+            hint_text: 'Enter quote'
+            id: quotes
+        Button:
+            text: 'Add Quote'
+            on_press: root.add_quote(root.ids.mood.text, root.ids.quotes.text)
+        Button:
+            text: 'Back'
+            on_press: root.go_to_login_success()
+
 
 <RootWidget>
     LoginScreen:
@@ -137,3 +159,5 @@
         name: 'login_screen_success'
     ForgotPasswordScreen
         name: 'password_reset'
+    AddNewQuoteScreen
+        name: 'add_quote'
