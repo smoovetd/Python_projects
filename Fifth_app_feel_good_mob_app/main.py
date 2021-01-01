@@ -60,7 +60,18 @@ class AddNewQuoteScreen(Screen):
         self.manager.current = 'login_screen_success'
 
     def add_quote(self, mood, quote):
-        pass
+        file_path = ''
+        available_moods = [ pathlib.Path(item).stem for item in glob.glob('quotes/*.txt')]
+        file_path = f'quotes/{mood}.txt'
+        with open(file_path, 'a+') as file:
+            crnt_quotes = file.readlines()
+            quote = quote + '\n'
+            if quote in crnt_quotes:
+                self.ids.output.text = 'This quote already exists'
+            else:
+                file.writelines(quote)
+                self.ids.output.text = 'Quote is successfully added'
+
 
 class SignUpScreen(Screen):
     def add_user(self, username, password):
