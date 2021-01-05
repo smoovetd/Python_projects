@@ -66,12 +66,12 @@ class AddNewQuoteScreen(Screen):
         file_path = ''
         available_moods = [ pathlib.Path(item).stem for item in glob.glob('quotes/*.txt')]
         file_path = f'quotes/{mood}.txt'
+        quote = quote + '\n'
         if is_file_non_empty(file_path) == True:
             with open (file_path, 'r') as file:
                 crnt_quotes = file.readlines()
             with open(file_path, 'a') as file:
                 is_quote_existing = False
-                quote = quote + '\n'
                 for single_quote in crnt_quotes:
                     if SequenceMatcher(a = quote, b = single_quote).ratio() >= self.matcher_ratio:
                         is_quote_existing = True
