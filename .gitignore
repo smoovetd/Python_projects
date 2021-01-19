@@ -4,6 +4,8 @@ Basics/
 #Ignore files within helper directory
 helper/
 
+__pycache__/
+
 #ignore test_git_ignore.txt
 test_git_ignore.txt
 
