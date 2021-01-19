@@ -2,7 +2,7 @@ import cv2
 import pandas
 from datetime import datetime
 
-df = pandas.DataFrame(columns = ['Start Time', 'End Time'])
+df = pandas.DataFrame(columns = ['Start_Time', 'End_Time'])
 
 video = cv2.VideoCapture(0)
 first_frame = None
@@ -39,7 +39,7 @@ while True:
     status_list.append(status)
 
     status_list = status_list[-2:]
-    
+
     if status_list[-1] != status_list [-2]:
         print('Change from status ' + str(status_list[-2]) + ' to status: ' + str(status_list[-1]) + ' at: ' + str(datetime.now()))
         times.append(datetime.now())
@@ -61,7 +61,7 @@ print(status_list)
 print(times)
 
 for activity in range(0, len(times), 2):
-    df = df.append({'Start Time':times[activity], 'End Time': times[activity+1]}, ignore_index = True)
+    df = df.append({'Start_Time':times[activity], 'End_Time': times[activity+1]}, ignore_index = True)
 
 df.to_csv('Times.csv')
 cv2.destroyAllWindows()
