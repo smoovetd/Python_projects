@@ -7,7 +7,6 @@ import pandas
 base_url = 'http://www.pyclass.com/real-estate/rock-springs-wy/LCWYROCKSPRINGS/'
 page_ext = 't=0&s='
 html_ext = '.html'
-df = pandas.DataFrame()
 properties = []
 
 html_content = requests.get(base_url, headers = {'User-agent':'Mozilla/5.0 (X11; Ubuntu; Linux x86_64l rv:61.0) Gecko/20100101 Firefox/61.0'})
@@ -36,10 +35,41 @@ for crnt_page in range(0, max_pages, 1):
     all_props = crnt_page_content.find_all('div',{'class':'propertyRow'})
 
     for property in all_props:
-        crnt_prop = {}
         #print(property.find('h4').text)
-        crnt_prop['Price'] = property.find('h4',{'class':'propPrice'}).text.strip()
+        crnt_prop = {}
+        try:
+            crnt_prop['Price'] = property.find('h4',{'class':'propPrice'}).text.strip()
+        except:
+            crnt_prop['Price'] = None
+
+        try:
+            crnt_prop['Address'] = property.find_all('span',{'class':'propAddressCollapse'})[0].text.strip()
+        except:
+            crnt_prop['Address'] = None
+
+        try:
+            crnt_prop['Region'] = property.find_all('span',{'class':'propAddressCollapse'})[1].text.strip()
+        except:
+            crnt_prop['Region'] = None
+
+        try:
+            crnt_prop['Beds'] = property.find('span',{'class':'infoBed'}).text.strip()
+        except:
+            crnt_prop['Beds'] = None
+
+        try:
+            crnt_prop['Baths'] = property.find('span',{'class':'infoValueFullBath'}).text.strip()
+        except:
+            crnt_prop['Baths'] = None
+
+        try:
+            crnt_prop['Area_sqft' ] = property.find('span',{'class':'infoSqFt'}).text.strip()
+        except:
+            crnt_prop['Area_sqft'] = None
+
         properties.append(crnt_prop)
 
+
+df = pandas.DataFrame(properties)
 print(properties)
 print(df)
