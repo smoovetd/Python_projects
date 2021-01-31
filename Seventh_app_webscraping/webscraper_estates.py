@@ -23,7 +23,7 @@ else:
 #finding max pages s
 page_nums = content.find_all('a',{'class':'Page'})
 max_pages = int(page_nums[-1].text)
-print(max_pages)
+#print(max_pages)
 
 for crnt_page in range(0, max_pages, 1):
     #print(crnt_page * 10)
@@ -67,9 +67,27 @@ for crnt_page in range(0, max_pages, 1):
         except:
             crnt_prop['Area_sqft'] = None
 
+        all_groups = property.find_all('div', {'class':'columnGroup'})
+        additional_info = []
+        for group in all_groups:
+            try:
+                feature_group = group.find('span',{'class':'featureGroup'}).text
+            except:
+                feature_group = None
+
+            try:
+                feature_name = ''.join([item.text for item in group.find_all('span',{'class':'featureName'})])
+            except:
+                feature_name = None
+
+            if feature_group != None and feature_name != None:
+                additional_info.append(str(len(additional_info) + 1) + '. ' + feature_group + ': ' + ''.join(feature_name))
+
+        crnt_prop['Additional_info'] = '\n'.join(additional_info)
         properties.append(crnt_prop)
 
 
 df = pandas.DataFrame(properties)
-print(properties)
-print(df)
+df.to_csv('test_res.csv')
+#print(properties)
+#print(df)
