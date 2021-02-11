@@ -1,0 +1,15 @@
+{%extends 'base.html'%}
+{%block content%}
+<script type="text/javascript" src ={{cdn_js | safe}}></script>
+<div class="Stock Info">
+  <h5>This page plots with Bokeh Candlestick chart from yahoo finance for company for period</h5>
+  <form method = "POST">
+    <input name = "Company">
+    <input name = "Start Date">
+    <input name = "End Date">
+    <input type = "submit">
+  </form>
+</div>
+{{js_script | safe}}
+{{div_script | safe}}
+{%endblock%}
