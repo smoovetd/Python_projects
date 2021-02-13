@@ -2,17 +2,18 @@
 <html lang = "en">
   <head>
     <title>Height Collector App</title>
-    <link rel="stylesheet" href ="{{url_for('static',filename='../static/main.css')}}"/>
+    <link rel="stylesheet" href ="../static/main.css"/ type="text/css">
   </head>
   <body>
     <div class='main_div'>
       <h1>Collecting Heights</h1>
-      <form class = "user_input" method = "POST">
-        <label for="mail">Enter mail:</label>
-        <input type="mail" id="mail" name = "mail"/>
-        <label for="mail">Enter height:</label>
-        <input type="text" id="height" name = "height"/>
-        <input type = "submit">
+      <h3>Please fill the enties to get population statistics on hights</h3>
+      <form class = "user_input" action="success.html" method = "POST">
+        <input placeholder="Enter your email" title="Your email is in good hands" type="email" id="email" name = "email">
+        <br/>
+        <input placeholder="Enter height in meters" type="number" min="0.5" max = "3.0" step="0.01" id="height" name = "height">
+        <br/>
+        <button type = "submit"> Submit </button>
       </div>
     </div<
   </body>

@@ -1,0 +1,58 @@
+html, body{
+  height: 100%;
+  margin: 0;
+}
+
+.main_div {
+  margin: 0 auto;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  text-align: center;
+  background-color: #008B8B;
+}
+
+.main_div h1{
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  color: #DDCCEE;
+  margin-top: 80px;
+}
+
+.main_div h3{
+  font-family: Arial, sans-serif;
+  font-size: 17px;
+  color: #DDCCEE;
+  margin-top: 35px;
+}
+
+.main_div form{
+  margin-top: 30px;
+}
+
+.main_div form input{
+  width: 350px;
+  height: 40px;
+  font-family: Arial, sans-serif;
+  margin: 2px;
+  padding: 10px;
+  font-size: 25px;
+}
+
+.main_div button{
+  width: 150px;
+  height: 40px;
+  font-size: 30px;
+  background-color: steelblue;
+  margin: 4px;
+  color: cornsilk;
+  font-family: Arial, sans-serif;
+}
+
+.main_div p{
+  margin: 100px;
+  color: cornsilk;
+  font-size: 30px;
+  padding: 10px;
+}
